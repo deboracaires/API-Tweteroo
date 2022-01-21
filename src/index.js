@@ -27,7 +27,7 @@ app.post('/sign-up', (req, res) => {
     } else {
         users.push(user);
     }
-    res.send('OK');
+    res.sendStatus(201);
 })
 
 app.post('/tweets', (req, res) => {
@@ -39,7 +39,19 @@ app.post('/tweets', (req, res) => {
     } else {
         tweets.push(tweet);
     }
-    res.send('OK'); 
+    res.sendStatus(201); 
+})
+
+app.get('/tweets', (req, res) => {
+    const lastTweets = [];
+    let counter = 0;
+    for (let i = (tweets.length - 1); i > -1; i--) {
+        const user = findUsername(tweets[i].username);
+        lastTweets.push(tweets[i]);
+        lastTweets[counter].avatar = user[0].avatar;
+        counter++;
+    }
+    res.send(lastTweets.slice(0,10))
 })
 
 app.listen(5000);
